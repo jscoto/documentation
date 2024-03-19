@@ -9,7 +9,7 @@ import License from "@site/docs/pipeline-components-and-applications/loaders-sto
 <License/>
 ```
 
-## Redshift invalid schema evolution recovery
+## [Redshift-only] New migration mechanism & recovery tables
 
 ### What is schema evolution?
 
@@ -17,13 +17,13 @@ One of Snowplow’s key features is the ability to [define custom schemas and va
 
 There are two main types of schema changes:
 
-**Breaking**: The schema version has to be changed in a major way (`1-2-3` → `2-0-0`). In Redshift, each major schema version has its own table (`..._1`, `..._2`, etc, for example: `com_snowplowanalytics_snowplow_ad_click_1`).
+**Breaking**: The schema version has to be changed in a model way (`1-2-3` → `2-0-0`). In Redshift, each model schema version has its own table (`..._1`, `..._2`, etc, for example: `com_snowplowanalytics_snowplow_ad_click_1`).
 
-**Non-breaking**: The schema version can be changed in a minor way (`1-2-3` → `1-3-0` or `1-2-3` → `1-2-4`). Data is stored in the same database table.
+**Non-breaking**: The schema version can be changed in a addition way (`1-2-3` → `1-3-0` or `1-2-3` → `1-2-4`). Data is stored in the same database table.
 
 ### How it used to work
 
-In the past, the transformer would format the data according to the latest version of the schema it saw (for a given major version, e.g. `1-*-*`). For example, if a batch contained events with schema versions `1-0-0`, `1-0-1` and `1-0-2`, the transformer would structure the shredded data based on version `1-0-2`. Then the loader would adjust the database table and load the file.
+In the past, the transformer would fetch all schemas for an entity (which conforms to the `vendor/name/model-*-*` criterion of the entity) from Iglu Server, merge them, extract properties from JSON, stringify using tab char as delimeter and put null char in case the property is missing. Then the loader would adjust the database table and load the file.
 
 This logic relied on two assumptions:
 
@@ -70,7 +70,7 @@ These would be merged into the following:
 ```
 
 
-Second, the loader does not fail when it can’t modify the database table to store both old and new events. (As a reminder, an example would be changing the type of a field from `integer` to `string`.) Instead, it creates a _temporary_ table for the new data as an exception. The users can then run SQL statements to resolve this situation as they see fit. For instance, consider these two schemas:
+Second, the loader does not fail when it can’t modify the database table to store both old and new events. (As a reminder, an example would be changing the type of a field from `integer` to `string`.) Instead, it creates a table for the new data as an exception. The users can then run SQL statements to resolve this situation as they see fit. For instance, consider these two schemas:
 ```json
 {
    // 1-0-0
