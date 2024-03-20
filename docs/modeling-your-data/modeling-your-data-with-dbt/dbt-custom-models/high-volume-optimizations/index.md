@@ -19,7 +19,7 @@ These configurations have not been fully tested and leave you at risk of issues 
 
 ### Derived Tables
 
-In general we try to only write the columns into [this run](/docs/modeling-your-data/modeling-your-data-with-dbt/package-mechanics/this-run-tables/index.md), and therefore derived tables, that are populated and relevant to that table. However, there may by many columns in these tables that you don't require and as as cloud warehouses are usually [columnar warehouses](https://en.wikipedia.org/wiki/Column-oriented_DBMS) this leads to more compute required to write these columns, and more storage to keep and maintain the metadata for them.
+In general we try to only write the columns into [this run](/docs/modeling-your-data/modeling-your-data-with-dbt/package-mechanics/this-run-tables/index.md), and therefore derived tables, that are populated and relevant to that table. However, there may be many columns in these tables that you don't require and as cloud warehouses are usually [columnar warehouses](https://en.wikipedia.org/wiki/Column-oriented_DBMS) this leads to more compute required to write these columns, and more storage to keep and maintain the metadata for them.
 
 Rather than edit the this run tables directly, as this could leave you out of sync with our updates, we recommend changing the materialization of all this run models (except the events and base sessions) to be `ephemeral`, this stops the incremental data being first written as a table before being merged into the derived table. Doing this may not be the best option if you re-use any of these tables in multiple custom models as it will have to run them each time. 
 
