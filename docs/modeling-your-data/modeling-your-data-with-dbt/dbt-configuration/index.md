@@ -32,7 +32,7 @@ import DbtVariables from "@site/docs/reusable/dbt-variables/_index.md"
 ## Warehouse specific configurations
 ### Postgres
 
-To optimism performance of large Postgres datasets you can create [indexes](https://docs.getdbt.com/reference/resource-configs/postgres-configs#indexes) in your dbt model config for columns that are commonly used in joins or where clauses. For example:
+To optimize the performance of large Postgres datasets you can create [indexes](https://docs.getdbt.com/reference/resource-configs/postgres-configs#indexes) in your dbt model config for columns that are commonly used in joins or where clauses. For example:
 
 ``` yaml
 # snowplow_web_sessions_custom.sql
