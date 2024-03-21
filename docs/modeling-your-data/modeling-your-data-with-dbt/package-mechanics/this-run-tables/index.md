@@ -4,7 +4,7 @@ description: "Details about the this run table approach use in our packages."
 sidebar_position: 40
 ---
 
-Our packages make use of a series of `this run` tables, named such because they are dropped and recreated each `dbt run` to only contain relevant information that that run. These tables allow for efficient re-use of information throughout a single run, and also allow you to debug any issues should a run fail.
+Our packages make use of a series of `this run` tables, named such because they are dropped and recreated each `dbt run` to only contain relevant information of that run. These tables allow for efficient re-use of information throughout a single run, and also allow you to debug any issues should a run fail.
 
 ## Events This Run
 As described in the [incremental sessionization logic](/docs/modeling-your-data/modeling-your-data-with-dbt/package-mechanics/incremental-processing/index.md), the first thing we do in any given run is identify what events need to be processed as part of that run. These events are [deduplicated](/docs/modeling-your-data/modeling-your-data-with-dbt/package-mechanics/deduplication/index.md), have relevant [entities and SDEs](/docs/modeling-your-data/modeling-your-data-with-dbt/package-features/modeling-entities/index.md) extracted and attached, and the appropriate [identifiers](/docs/modeling-your-data/modeling-your-data-with-dbt/package-features/custom-identifiers/index.md) are calculated.
